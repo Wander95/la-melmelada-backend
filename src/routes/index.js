@@ -1,9 +1,11 @@
 const { Router } = require('express');
-const { allCategories } = require('../controllers/meal');
+const { allCategories, allMealsByCategory,mealById } = require('../controllers/meal');
 
-const RootRouter = Router();
+const MealRouter = Router();
 const API_V1 = '/v1'
 
-RootRouter.use(`${API_V1}/categories`, allCategories);
+MealRouter.get(`${API_V1}/categories`, allCategories);
+MealRouter.get(`${API_V1}/categories/:categoryName`, allMealsByCategory);
+MealRouter.get(`${API_V1}/categories/:categoryName/:mealId`, mealById);
 
-module.exports = RootRouter
+module.exports = MealRouter
