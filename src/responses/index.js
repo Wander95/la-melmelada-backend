@@ -1,21 +1,24 @@
-module.exports.OK = ({data,path})=>{
+module.exports.OK = ({ data=null ,path, message = ''})=>{
 
   return {
     status: 'success',
     code: 200,
     path,
-    data
+    data,
+    message
   }
   
 }
 
-module.exports.BAD_REQUEST = ({error,path})=>{
+module.exports.BAD_REQUEST = ({ data=null,error,path,message = ''})=>{
 
   return {
     status: 'fail',
     code: 400,
     path,
-    error
+    error,
+    message,
+    data
   }
   
 }
