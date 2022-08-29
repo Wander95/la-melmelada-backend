@@ -76,7 +76,25 @@ module.exports.mealById = async (
       message: 'meal does not exist'
     }))
     
-    return res.status(200).json( OK({ data: result.data.meals, path: req.originalUrl }) )
+    const objectEntries = Object.entries(result.data.meals[0])
+    
+    const measures = []
+    const ingredients = []
+
+    for (const entries of objectEntries) {
+      const [  key,value ] = entries;
+      
+      if(key.startsWith('strIngredient') && value.length > 0) ingredients.push(value)
+      if(key.startsWith('strMeasure') && value.length > 0) measures.push(value)
+    }
+
+    
+    return res.status(200).json( OK({ 
+      data: {
+        measures,
+        ingredients,
+        ...result.data.meals[0]
+      }, path: req.originalUrl }) )
     
   } catch (error) {
     console.log(error) 
