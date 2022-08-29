@@ -14,7 +14,7 @@ module.exports.allCategories = async (
     
     const result = await axios.get(`${CONFIG.BASE_URL}/categories.php`)
     
-    return res.status(200).json( OK({ data: result.data, path: req.originalUrl }) )
+    return res.status(200).json( OK({ data: result.data.categories, path: req.originalUrl }) )
     
   } catch (error) {
     console.log(error) 
@@ -33,6 +33,26 @@ module.exports.allMealsByCategory = async (
   /** @type {import('express').Response } */
   res
 )=>{
+  const categoryName = req.params.categoryName
+  
+  try {
+    
+    const result = await axios.get(`${CONFIG.BASE_URL}/filter.php?c=${categoryName}`, {
+      params: req.params
+    })
+    
+    if(!result.data.meals) return res.status(400).json(BAD_REQUEST({
+      path: req.originalUrl,
+      message: 'Category does not exist',
+    }))
+    
+    return res.status(200).json( OK({ data: result.data.meals, path: req.originalUrl }) )
+    
+  } catch (error) {
+    console.log(error) 
+    
+    return res.status(400).json( BAD_REQUEST({ path: req.originalUrl }) )
+  }
   
   
 }
@@ -44,6 +64,25 @@ module.exports.mealById = async (
   /** @type {import('express').Response } */
   res
 )=>{
+  const mealId = req.params.mealId
+  
+  try {  
+    const result = await axios.get(`${CONFIG.BASE_URL}/lookup.php?i=${mealId}`, {
+      params: req.params
+    })
+    
+    if(!result.data.meals) return res.status(400).json(BAD_REQUEST({
+      path: req.originalUrl,
+      message: 'meal does not exist'
+    }))
+    
+    return res.status(200).json( OK({ data: result.data.meals, path: req.originalUrl }) )
+    
+  } catch (error) {
+    console.log(error) 
+    
+    return res.status(400).json( BAD_REQUEST({ path: req.originalUrl }) )
+  }
   
   
 }
