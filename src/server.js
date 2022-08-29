@@ -9,7 +9,11 @@ const RootRouter = require('./routes');
 class App {
   app = express();
   PORT = process.env.PORT || 3004
-
+  allowedOrigins = [
+    'http://localhost:5173',
+    'http://yourapp.com'
+  ];
+  
   constructor (){ }
 
   middleware(){
@@ -17,7 +21,9 @@ class App {
     this.app.use(express.json());
     this.app.use(express.urlencoded({extended: true}));
     this.app.use(morgan('dev'));
-    this.app.use(cors("*"))
+    this.app.use(cors({
+      origin: this.allowedOrigins
+    }))
 
   }
 
